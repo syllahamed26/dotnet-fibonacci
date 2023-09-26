@@ -5,7 +5,7 @@
 
 ./tests/Leonardo.Tests/coverage/
 ./tests/Leonardo.Tests/TestResults/
-./tests/Leonardo.Tests/report/
+./tests/Leonardo.Tests/report
 
 # dotenv files
 .env
