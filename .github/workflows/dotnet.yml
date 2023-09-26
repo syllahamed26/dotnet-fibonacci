@@ -60,3 +60,4 @@ jobs:
       with:
         name: Publish win-x64 Fibonacci
         path: ./win-x64/fibonacci
+        
