@@ -56,7 +56,7 @@ jobs:
       run: |
         # https://learn.microsoft.com/en-us/cli/azure/container?view=azure-cli-latest#az-container-create()
         az group create --name mon-resource-group --location northeurope
-        az container create --resource-group mon-resource-group --name fibonacci-ivorian --dns-name-label fibonacci-ivorian --image docker.io/syllahamed26/fibonacci:${{ needs.tags.outputs.new_version }} --ports 8080
+        az container create --resource-group ivorian-resource-group --name fibonacci-ivorian --dns-name-label fibonacci-ivorian --image docker.io/syllahamed26/fibonacci:${{ needs.tags.outputs.new_version }} --ports 8080
   build:
     needs: tags
     runs-on: ubuntu-latest
