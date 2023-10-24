@@ -6,4 +6,4 @@ RUN dotnet publish "Demo.csproj" -c Release -r linux-arm64 --self-contained=true
 FROM mcr.microsoft.com/dotnet/runtime-deps:8.0-preview AS final
 WORKDIR /app 
 COPY --from=build /publish . 
-ENTRYPOINT ["/app/Demo", "44"]
+ENTRYPOINT ["/app/Demo"]
