@@ -5,10 +5,14 @@ namespace Leonardo;
 
 public class Fibonacci
 {
-    public static async Task<IList<int>> RunAsync(string[] args)
+    private readonly FibonacciDataContext _context;
+    public Fibonacci(FibonacciDataContext context)
     {
-        await using var context = new FibonacciDataContext();
-        
+        _context = context;
+    }
+    
+    public async Task<IList<int>> RunAsync(string[] args)
+    {
         if (args.Length >= 100)
         {
             throw new ArgumentException("Too many arguments.");
@@ -22,7 +26,7 @@ public class Fibonacci
         
         foreach (var s in args)
         {
-            var tFibonacci = await context.TFibonaccis
+            var tFibonacci = await _context.TFibonaccis
                 .Where(t => t.FibInput == int.Parse(s))
                 .FirstOrDefaultAsync();
             if (tFibonacci == null)
@@ -38,26 +42,26 @@ public class Fibonacci
             {
                 tasks.Add(Task.FromResult((int)tFibonacci.FibOutput));
             }
-
-            foreach (var task in tasks)
-            {
-                var result = await task;
-                
-                context.TFibonaccis.Add(new TFibonacci
-                {
-                    FibInput = int.Parse(args[tasks.IndexOf(task)]),
-                    FibOutput = result
-                });
-                
-                Console.WriteLine($"Result: {result}");
-                results.Add(task.Result);
-            }
-            
-            sw.Stop();
-            Console.WriteLine($"Total time: {sw.ElapsedMilliseconds} ms");
         }
         
-        await context.SaveChangesAsync();
+        foreach (var task in tasks)
+        {
+            var result = await task;
+                
+            _context.TFibonaccis.Add(new TFibonacci
+            {
+                FibInput = int.Parse(args[tasks.IndexOf(task)]),
+                FibOutput = result
+            });
+                
+            Console.WriteLine($"Result: {result}");
+            results.Add(task.Result);
+        }
+            
+        sw.Stop();
+        Console.WriteLine($"Total time: {sw.ElapsedMilliseconds} ms");
+        
+        await _context.SaveChangesAsync();
         
         return results;
     }
